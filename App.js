@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,7 +10,7 @@ import TrackListScreen from './src/screens/TrackListScreen';
 import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 
-import {Provider as AuthProvider} from './src/context/AuthContext';
+import {Provider as AuthProvider, Context as AuthContext} from './src/context/AuthContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,17 +33,17 @@ function TrackScreens() {
   );
 }
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+const App = () => {
+  const {state, restoreToken} = useContext(AuthContext);
 
-  function changeLoginStatus() {
-    setIsLoggedIn(!isLoggedIn);
-  }
+  React.useEffect(() => {
+    restoreToken();
+  });
 
   return (
     <NavigationContainer>
 
-      {isLoggedIn ? (
+      {state.token !== null ? (
         <Tab.Navigator>
           <Tab.Screen
             name="TrackScreens"
@@ -68,13 +68,11 @@ function App() {
             name="Signup"
             component={SignupScreen}
             options={{title: "Sign up", headerShown: false}}
-            initialParams={ {changeLoginStatus: () => changeLoginStatus()} }
           />
           <Stack.Screen
             name="Signin"
             component={SigninScreen}
             options={{title: "Sign in", headerShown: false}}
-            initialParams={ {changeLoginStatus: () => changeLoginStatus()} }
           />
         </Stack.Navigator>
       )}

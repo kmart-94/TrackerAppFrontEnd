@@ -4,8 +4,6 @@ import {Button, Text, Input} from 'react-native-elements';
 import {Context as AuthContext} from '../context/AuthContext';
 
 const SignupScreen = ({navigation, route}) => {
-  const changeLoginStatus = route.params.changeLoginStatus;
-
   const {state, signup} = useContext(AuthContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
