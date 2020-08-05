@@ -8,11 +8,13 @@ const authReducer = (state, action) => {
     case 'add_error':
       return {...state, errorMessage: action.payload};
     case 'signin':
-      return {token: action.payload, errorMessage: ''};
+      return {...state, token: action.payload, errorMessage: ''};
+    case 'signout':
+      return {...state, token: null, errorMessage: ''};
     case 'clear_error':
       return {...state, errorMessage: ''};
     case 'RESTORE_TOKEN':
-      return {token: action.payload, errorMessage: ''};
+      return {...state, token: action.payload, errorMessage: '', authResolved: true};
     default:
       return state;
   }
@@ -50,12 +52,13 @@ const signin = (dispatch) => {
   };
 };
 
-const signout = (dispatch) => {
-  //signout
-
-  //refresh State and move to signin screen
-
-  //remove authentication
+const signout = (dispatch) => async () => {
+  try {
+    await AsyncStorage.removeItem('token');
+    dispatch({type: 'signout'});
+  } catch (err) {
+    dispatch({type: 'add_error', payload: 'Error when logging out.'});
+  }
 };
 
 const restoreToken = (dispatch) => {

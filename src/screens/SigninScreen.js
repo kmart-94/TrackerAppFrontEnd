@@ -8,7 +8,7 @@ const SigninScreen = ({navigation}) => {
   const {state, signin, clearErrorMessage} = useContext(AuthContext);
 
   React.useEffect(() => {
-    navigation.addListener('blur', clearErrorMessage);
+    const listener = navigation.addListener('blur', clearErrorMessage);
 
     return () => listener;
   });

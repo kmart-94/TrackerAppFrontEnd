@@ -9,6 +9,7 @@ import TrackDetailScreen from './src/screens/TrackDetailScreen';
 import TrackListScreen from './src/screens/TrackListScreen';
 import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
+import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 
 import {Provider as AuthProvider, Context as AuthContext} from './src/context/AuthContext';
 
@@ -43,39 +44,51 @@ const App = () => {
   return (
     <NavigationContainer>
 
-      {state.token !== null ? (
-        <Tab.Navigator>
-          <Tab.Screen
-            name="TrackScreens"
-            component={TrackScreens}
-            options={{title: "Tracks List"}}
-          />
-          <Tab.Screen
-            name="CreateTrack"
-            component={TrackCreateScreen}
-            options={{title: "Create Track", headerShown: true}}
-          />
-          <Tab.Screen
-            name="Account"
-            component={AccountScreen}
-          />
-        </Tab.Navigator>
+    {
+      state.authResolved === true ? (
+        state.token !== null ? (
+          <Tab.Navigator>
+            <Tab.Screen
+              name="TrackScreens"
+              component={TrackScreens}
+              options={{title: "Tracks List"}}
+            />
+            <Tab.Screen
+              name="CreateTrack"
+              component={TrackCreateScreen}
+              options={{title: "Create Track", headerShown: true}}
+            />
+            <Tab.Screen
+              name="Account"
+              component={AccountScreen}
+            />
+          </Tab.Navigator>
 
+        ) : (
+
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Signup"
+              component={SignupScreen}
+              options={{title: "Sign up", headerShown: false}}
+            />
+            <Stack.Screen
+              name="Signin"
+              component={SigninScreen}
+              options={{title: "Sign in", headerShown: false}}
+            />
+          </Stack.Navigator>
+        )
       ) : (
-
         <Stack.Navigator>
           <Stack.Screen
-            name="Signup"
-            component={SignupScreen}
-            options={{title: "Sign up", headerShown: false}}
-          />
-          <Stack.Screen
-            name="Signin"
-            component={SigninScreen}
-            options={{title: "Sign in", headerShown: false}}
+            name="ResolveAuth"
+            component={ResolveAuthScreen}
+            options={{title: "Resolve Auth", headerShown: false}}
           />
         </Stack.Navigator>
-      )}
+      )
+    }
 
     </NavigationContainer>
   );
