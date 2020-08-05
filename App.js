@@ -2,6 +2,7 @@ import React, {useState, useEffect, useContext} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AccountScreen from './src/screens/AccountScreen';
 import TrackCreateScreen from './src/screens/TrackCreateScreen';
@@ -96,8 +97,10 @@ const App = () => {
 
 export default () => {
   return (
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }
