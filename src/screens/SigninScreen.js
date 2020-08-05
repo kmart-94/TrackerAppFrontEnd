@@ -1,38 +1,42 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
 import {View, StyleSheet} from 'react-native';
-import {Button, Text, Input} from 'react-native-elements';
+import {Button} from 'react-native-elements';
+import AuthForm from '../components/AuthForm';
+import {Context as AuthContext} from '../context/AuthContext';
 
-const SigninScreen = ({navigation, route}) => {
-  const changeLoginStatus = route.params.changeLoginStatus;
+const SigninScreen = ({navigation}) => {
+  const {state, signin, clearErrorMessage} = useContext(AuthContext);
+
+  React.useEffect(() => {
+    navigation.addListener('blur', clearErrorMessage);
+
+    return () => listener;
+  });
+
   return (
     <View style={styles.container}>
-      <Text h3 style={styles.header}>Sign in to Tracker</Text>
-      <Input placeholder='Email'/>
-      <Input placeholder='Password'/>
-      <Button
-        title="Sign in"
-        onPress={ () => changeLoginStatus()}
-        buttonStyle={styles.button}
+      <AuthForm
+        header='Sign in to Tracker'
+        type="Sign in"
+        onSubmit={signin}
+        errorMessage={state.errorMessage}
       />
       <Button
         title="Go to Sign up"
-        onPress={ () => navigation.navigate('Signup') }
+        onPress={ () => navigation.navigate('Signup')}
         type="clear"
+        buttonStyle={styles.button}
       />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  header: {
-    marginTop: 15,
-    marginBottom: 5
+  container: {
+    marginTop: 100
   },
   button: {
     marginHorizontal: 10
-  },
-  container: {
-    marginTop: 100
   }
 });
 

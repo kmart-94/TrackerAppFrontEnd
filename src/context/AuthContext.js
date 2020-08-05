@@ -7,13 +7,19 @@ const authReducer = (state, action) => {
   switch (action.type) {
     case 'add_error':
       return {...state, errorMessage: action.payload};
-    case 'signup':
+    case 'signin':
       return {token: action.payload, errorMessage: ''};
+    case 'clear_error':
+      return {...state, errorMessage: ''};
     case 'RESTORE_TOKEN':
       return {token: action.payload, errorMessage: ''};
     default:
       return state;
   }
+};
+
+const clearErrorMessage = (dispatch) => {
+  return () => dispatch({type: 'clear_error'});
 };
 
 
@@ -23,8 +29,9 @@ const signup = (dispatch) => {
     try {
       const response = await trackerApi.post('/signup', {email, password});
       await AsyncStorage.setItem('token', response.data.token);
-      dispatch({type: 'signup', payload: response.data.token});
+      dispatch({type: 'signin', payload: response.data.token});
     } catch (err) {
+      console.log(err);
       dispatch({type: 'add_error', payload: 'Something went wrong.'})
     }
 
@@ -32,8 +39,14 @@ const signup = (dispatch) => {
 };
 
 const signin = (dispatch) => {
-  return ({email, password}) => {
-
+  return async ({email, password}) => {
+    try {
+      const response = await trackerApi.post('/signin', {email, password});
+      await AsyncStorage.setItem('token', response.data.token);
+      dispatch({type: 'signin', payload: response.data.token});
+    } catch (err) {
+      dispatch({type: 'add_error', payload: 'Something went wrong.'})
+    }
   };
 };
 
@@ -57,15 +70,12 @@ const restoreToken = (dispatch) => {
     }
 
       // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
     dispatch({ type: 'RESTORE_TOKEN', payload: userToken });
   };
 };
 
 export const {Provider, Context} = createDataContext(
   authReducer,
-  {signin, signout, signup, restoreToken},
+  {signin, signout, signup, restoreToken, clearErrorMessage},
   {token: null, errorMessage: ''}
 );
