@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import AccountScreen from './src/screens/AccountScreen';
 import TrackCreateScreen from './src/screens/TrackCreateScreen';
@@ -12,7 +11,9 @@ import SigninScreen from './src/screens/SigninScreen';
 import SignupScreen from './src/screens/SignupScreen';
 import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Provider as AuthProvider, Context as AuthContext} from './src/context/AuthContext';
+import {Provider as LocationProvider} from './src/context/LocationContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,7 +41,7 @@ const App = () => {
 
   React.useEffect(() => {
     restoreToken();
-  });
+  }, []);
 
   return (
     <NavigationContainer>
@@ -97,10 +98,12 @@ const App = () => {
 
 export default () => {
   return (
-    <SafeAreaProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </SafeAreaProvider>
+    <LocationProvider>
+      <SafeAreaProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </SafeAreaProvider>
+    </LocationProvider>
   );
 }

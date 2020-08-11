@@ -11,7 +11,7 @@ const SignupScreen = ({navigation}) => {
     const listener = navigation.addListener('blur', clearErrorMessage);
 
     return () => listener;
-  });
+  }, []);
 
   return (
     <View style={styles.container}>

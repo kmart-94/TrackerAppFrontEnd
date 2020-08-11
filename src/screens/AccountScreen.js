@@ -11,7 +11,7 @@ const AccountScreen = ({navigation}) => {
     const listener = navigation.addListener('blur', clearErrorMessage);
 
     return () => listener;
-  });
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
