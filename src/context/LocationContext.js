@@ -3,6 +3,7 @@ import createDataContext from './createDataContext';
 const locationReducer = (state, action) => {
   switch(action.type) {
     case "addLocation":
+    console.log("tracking");
       return {...state, currentLocation: action.payload};
     default:
       return state;
