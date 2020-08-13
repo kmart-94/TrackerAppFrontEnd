@@ -1,4 +1,5 @@
 import createDataContext from './createDataContext';
+import TrackerApi from '../api/tracker';
 
 const trackReducer = (state, action) => {
   switch(action.type) {
@@ -10,7 +11,7 @@ const trackReducer = (state, action) => {
 };
 
 const createTrack = dispatch => (name, locations) => {
-  console.log('Saving!!! LocationContext, 31');
+  console.log('Saving!!! LocationContext, 31', name, locations.length);
 };
 
 const fetchTracks = dispatch => () => {
