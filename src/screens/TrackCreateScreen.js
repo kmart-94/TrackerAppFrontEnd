@@ -1,4 +1,4 @@
-import  "../_mockLocation";
+//import  "../_mockLocation";
 
 import React, { useContext } from 'react';
 import {StyleSheet} from 'react-native';
@@ -18,15 +18,14 @@ const TrackCreateScreen = () => {
   const {state, addLocation} = useContext(LocationContext);
   const isFocused = useIsFocused();
 
-  const [err] = useLocation(isFocused, (location) => addLocation(location, state.recording));
+  const [err] = useLocation(isFocused, state.recording, (location) => addLocation(location, state.recording));
 
   return (
     <SafeAreaView>
       <Text h3 style={styles.container}>Create a track</Text>
       <Map />
       {err ? <Text style={styles.errorMessage}>Please enable location services.</Text> : null}
-      <TrackForm
-      />
+      <TrackForm />
     </SafeAreaView>
   );
 };
