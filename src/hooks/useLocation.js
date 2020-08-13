@@ -1,7 +1,7 @@
 import {useState, useEffect, useContext} from 'react';
 import {Accuracy, requestPermissionsAsync, watchPositionAsync} from 'expo-location';
 
-export default (shouldTrack, recording, callback) => {
+export default (shouldTrack, callback) => {
   const [err, setErr] = useState(null);
   const [subscriber, setSubscriber] = useState(null);
 
@@ -25,30 +25,21 @@ export default (shouldTrack, recording, callback) => {
     }
   }
 
-//idea, pass in another flag "recording" alongside shouldTrack and callback
-//change useEffect such that it will run again when this "recording" flag changes
-//then inside if (shouldTrack) replace with
-//   {
-//     if (subscriber) {
-//       subscriber.remove();
-//       setSubscriber(null);
-//     }
-//     startWatching();
-//   }
-//should only run once each time "recording changes"
-
   useEffect(() => {
     if (shouldTrack) {
-      if (subscriber) {
-        subscriber.remove();
-        setSubscriber(null);
-      }
       startWatching();
     } else {
       subscriber.remove();
       setSubscriber(null);
     }
-  }, [shouldTrack, recording]);
+
+    return () => {
+      if (subscriber) {
+        subscriber.remove();
+        setSubscriber(null);
+      }
+    };
+  }, [shouldTrack, callback]);
 
   return [err];
 

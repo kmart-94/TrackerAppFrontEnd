@@ -23,6 +23,7 @@ const startRecording = dispatch => () => {
 };
 
 const stopRecording = dispatch => () => {
+  console.log("stop recording! LocationContext 26");
   dispatch({type: "stopRecording"});
 };
 
@@ -31,10 +32,10 @@ const changeName = dispatch => (name) => {
 };
 
 const addLocation = dispatch => (location, recording) => {
-  console.log("location callback, LocationContext, 34");
+  console.log("adding current location, LocationContext, 34");
   dispatch({type: 'addCurrentLocation', payload: location});
   if (recording) {
-    console.log('recorded! LocationContext, 36');
+    console.log('recording path! LocationContext, 36');
     dispatch({type: "addLocation", payload: location});
   }
 };
