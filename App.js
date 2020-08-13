@@ -14,6 +14,7 @@ import ResolveAuthScreen from './src/screens/ResolveAuthScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import {Provider as AuthProvider, Context as AuthContext} from './src/context/AuthContext';
 import {Provider as LocationProvider} from './src/context/LocationContext';
+import {Provider as TrackProvider} from './src/context/TrackContext';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -98,12 +99,14 @@ const App = () => {
 
 export default () => {
   return (
-    <LocationProvider>
-      <SafeAreaProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </SafeAreaProvider>
-    </LocationProvider>
+    <TrackProvider>
+      <LocationProvider>
+        <SafeAreaProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </SafeAreaProvider>
+      </LocationProvider>
+    </TrackProvider>
   );
 }

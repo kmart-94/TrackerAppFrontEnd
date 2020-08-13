@@ -27,6 +27,10 @@ const stopRecording = dispatch => () => {
   dispatch({type: "stopRecording"});
 };
 
+const saveRecording = dispatch => (name, locations) => {
+  console.log('Saving!!! LocationContext, 31');
+};
+
 const changeName = dispatch => (name) => {
   dispatch({type: 'changeName', payload: name});
 };
@@ -42,6 +46,6 @@ const addLocation = dispatch => (location, recording) => {
 
 export const {Provider, Context} = createDataContext(
   locationReducer,
-  {startRecording, stopRecording, changeName, addLocation},
+  {startRecording, stopRecording, saveRecording, changeName, addLocation},
   {currentLocation: null, locations: [], recording: false, name: ''}
 );

@@ -3,10 +3,11 @@ import {View, StyleSheet} from 'react-native';
 import {Input, Button} from 'react-native-elements';
 
 import {Context as LocationContext} from "../context/LocationContext";
+import {Context as TrackContext} from "../context/TrackContext";
 
 const TrackForm = () => {
-  const {state: {name, recording}, startRecording, stopRecording, changeName} = useContext(LocationContext);
-
+  const {state: {name, recording, locations}, startRecording, stopRecording, changeName} = useContext(LocationContext);
+  const {createTrack} = useContext(TrackContext);
   return (
     <View style={styles.container}>
       <Input
@@ -17,6 +18,7 @@ const TrackForm = () => {
         autoCapitalize="none"
         autoCorrect={false}
       />
+
       { !recording ?
           <Button
             title="Start Recording"
@@ -29,9 +31,22 @@ const TrackForm = () => {
         :
           <Button
             title="Stop"
-            onPress={ () => stopRecording() }
+            onPress={ () => {
+              stopRecording();
+            } }
           />
       }
+
+      {!recording && locations.length > 1 ?
+        (<Button
+          title="Save"
+          onPress={ () => createTrack(name, locations) }
+          buttonStyle={styles.spacerVert}
+         />
+        ) :
+         null
+      }
+
     </View>
   );
 };
