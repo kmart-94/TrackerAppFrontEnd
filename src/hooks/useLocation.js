@@ -1,46 +1,45 @@
 import {useState, useEffect, useContext} from 'react';
 import {Accuracy, requestPermissionsAsync, watchPositionAsync} from 'expo-location';
 
-export default (shouldTrack, callback) => {
+export default (shouldTrack, recording, callback) => {
   const [err, setErr] = useState(null);
+  const [subscriber, setSubscriber] = useState(null);
+
+  async function startWatching() {
+    //only called once per page render
+    try {
+      const response = await requestPermissionsAsync();
+      if (response.status === "granted") {
+        const sub = await watchPositionAsync({
+          accuracy: Accuracy.BestForNavigation,
+          timeInterval: 2000, //once every second
+          //distanceInterval: 0 //once every ten meters
+        }, callback);
+        setSubscriber(sub);
+      }
+      else {
+        setErr('err');
+      }
+    } catch (err) {
+      setErr(err);
+    }
+  }
 
   useEffect(() => {
-    let subscriber = null;
-    async function startWatching() {
-      //only called once per page render
-      try {
-        const response = await requestPermissionsAsync();
-        if (response.status === "granted") {
-          subscriber = await watchPositionAsync({
-            accuracy: Accuracy.BestForNavigation,
-            timeInterval: 1000, //once every second
-            //distanceInterval: 0 //once every ten meters
-          }, callback);
-        }
-        else {
-          setErr('err');
-        }
-      } catch (err) {
-        setErr(err);
-      }
-    }
-
     if (shouldTrack) {
+      if (subscriber) {
+        subscriber.remove();
+        setSubscriber(null);
+      }
       startWatching();
     } else {
-      if (subscriber) {
+      if (!recording && subscriber) {
         subscriber.remove();
-        subscriber = null;
+        setSubscriber(null);
       }
     }
 
-    return () => {
-      if (subscriber) {
-        subscriber.remove();
-        subscriber = null;
-      }
-    };
-  }, [shouldTrack, callback]);
+  }, [shouldTrack, recording]);
 
   return [err];
 
