@@ -14,7 +14,7 @@ import {Context as LocationContext} from "../context/LocationContext";
 
 
 
-const TrackCreateScreen = () => {
+const TrackCreateScreen = ({navigation}) => {
   const {state, addLocation} = useContext(LocationContext);
   const isFocused = useIsFocused();
 
@@ -25,7 +25,7 @@ const TrackCreateScreen = () => {
       <Text h3 style={styles.container}>Create a track</Text>
       <Map />
       {err ? <Text style={styles.errorMessage}>Please enable location services.</Text> : null}
-      <TrackForm />
+      <TrackForm navigation={navigation} />
     </SafeAreaView>
   );
 };

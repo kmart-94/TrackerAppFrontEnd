@@ -3,19 +3,22 @@ import TrackerApi from '../api/tracker';
 
 const trackReducer = (state, action) => {
   switch(action.type) {
-    case "createTrack":
-      return {...state, locations: [...state.locations, action.payload]};
+    case "fetchTracks":
+      return action.payload;
     default:
       return state;
   }
 };
 
-const createTrack = dispatch => (name, locations) => {
-  console.log('Saving!!! LocationContext, 31', name, locations.length);
+const createTrack = dispatch => async (name, locations) => {
+  console.log('Saving!!! LocationContext, 31');
+  await TrackerApi.post('/tracks', {name, locations});
 };
 
-const fetchTracks = dispatch => () => {
-
+const fetchTracks = dispatch => async () => {
+  console.log('fetching tracks, TrackContext, 19');
+  const response = await TrackerApi.get('/tracks');
+  dispatch({type: 'fetchTracks', payload: response.data})
 };
 
 const changeName = dispatch => (name) => {

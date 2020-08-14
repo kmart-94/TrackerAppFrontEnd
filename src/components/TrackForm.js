@@ -5,9 +5,10 @@ import {Input, Button} from 'react-native-elements';
 import {Context as LocationContext} from "../context/LocationContext";
 import useSaveTrack from "../hooks/useSaveTrack";
 
-const TrackForm = () => {
+const TrackForm = ({navigation}) => {
   const {state: {name, recording, locations}, startRecording, stopRecording, changeName} = useContext(LocationContext);
   const [saveTrack] = useSaveTrack();
+  
   return (
     <View style={styles.container}>
       <Input
@@ -40,7 +41,11 @@ const TrackForm = () => {
       {!recording && locations.length > 1 ?
         (<Button
           title="Save"
-          onPress={ () => saveTrack() }
+          onPress={ () => {
+            saveTrack();
+            navigation.navigate('TrackScreens')
+            }
+          }
           buttonStyle={styles.spacerVert}
          />
         ) :
